@@ -1,8 +1,41 @@
-POST http://localhost:4000/api/users/login HTTP/1.1
-content-type: application/json
+# POST http://localhost:4000/api/users/login HTTP/1.1
+# content-type: application/json
+# Accept-Charset: utf-8
 
-{
-    "email":"jake@jake.jake",
-    "username": "jake",
-    "password":"password1"
-}
+# {
+#     "email":"jake@jake.jake",
+#     "username": "jake",
+#     "password":"password"
+# }
+
+# GET http://localhost:4000/api/user HTTP/1.1
+# content-type: application/json
+# Accept-Charset: utf-8
+# Authorization: Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Impha2UiLCJpYXQiOjE2MDIwNTc3MzUsImV4cCI6MTYwMjA2MTMzNX0.PKwF4NXFm2zzG_w9OIz-hKWMH1bhxsMepeeVphghbrg
+
+# PUT http://localhost:4000/api/user HTTP/1.1
+# content-type: application/json
+# Accept-Charset: utf-8
+# Authorization: Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Impha2UiLCJpYXQiOjE2MDIwNTc3MzUsImV4cCI6MTYwMjA2MTMzNX0.PKwF4NXFm2zzG_w9OIz-hKWMH1bhxsMepeeVphghbrg
+
+# {
+#   "email": "jake@jake.jake",
+#   "username": "jake",
+#   "image": "updated image"
+# }
+
+
+# GET http://localhost:4000/api/profiles/jake HTTP/1.1
+# content-type: application/json
+# Accept-Charset: utf-8
+# Authorization: Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Impha2UiLCJpYXQiOjE2MDIwNjIxNTUsImV4cCI6MTYwMjA2NTc1NX0.gtFlisSvNk-tepVBrhkR8zdVjrX1Mus3lARXn1qJunQ
+
+# POST http://localhost:4000/api/profiles/jake/follow HTTP/1.1
+# content-type: application/json
+# Accept-Charset: utf-8
+# Authorization: Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Impha2UiLCJpYXQiOjE2MDIwNjIxNTUsImV4cCI6MTYwMjA2NTc1NX0.gtFlisSvNk-tepVBrhkR8zdVjrX1Mus3lARXn1qJunQ
+
+DELETE  http://localhost:4000/api/profiles/jake/follow HTTP/1.1
+content-type: application/json
+Accept-Charset: utf-8
+Authorization: Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Impha2UiLCJpYXQiOjE2MDIwNjIxNTUsImV4cCI6MTYwMjA2NTc1NX0.gtFlisSvNk-tepVBrhkR8zdVjrX1Mus3lARXn1qJunQ

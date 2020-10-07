@@ -1,4 +1,4 @@
-import { LoginDTO, RegisterDTO } from './../../models/user.dto';
+import { LoginDTO, RegisterDTO } from '../models/user.model';
 import {
   Body,
   Controller,
