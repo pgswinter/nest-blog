@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -45,81 +56,117 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.UserService = void 0;
+exports.AuthService = void 0;
 var user_entity_1 = require("./../entities/user.entity");
-var typeorm_1 = require("@nestjs/typeorm");
 var common_1 = require("@nestjs/common");
-var UserService = /** @class */ (function () {
-    function UserService(userRepo) {
+var typeorm_1 = require("@nestjs/typeorm");
+var AuthService = /** @class */ (function () {
+    function AuthService(userRepo, jwtService) {
         this.userRepo = userRepo;
+        this.jwtService = jwtService;
     }
-    UserService.prototype.checkIfFollowing = function () { };
-    UserService.prototype.findByUsername = function (username) {
+    // private mockUser = {
+    //   email: 'jake@jake.jake',
+    //   token: 'jwt.token.here',
+    //   username: 'jake',
+    //   bio: 'I work at statefarm',
+    //   image: null,
+    // };
+    AuthService.prototype.register = function (credentials) {
         return __awaiter(this, void 0, void 0, function () {
+            var user, payload, token, err_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.userRepo.findOne({ where: { username: username } })];
-                    case 1: return [2 /*return*/, _a.sent()];
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        user = this.userRepo.create(credentials);
+                        return [4 /*yield*/, user.save()];
+                    case 1:
+                        _a.sent();
+                        payload = { username: user.username };
+                        token = this.jwtService.sign(payload);
+                        return [2 /*return*/, { user: __assign(__assign({}, user.toJSON()), { token: token }) }];
+                    case 2:
+                        err_1 = _a.sent();
+                        if (err_1.code === '23505') {
+                            throw new common_1.ConflictException('Username has already been taken');
+                        }
+                        throw new common_1.InternalServerErrorException();
+                    case 3: return [2 /*return*/];
                 }
             });
         });
     };
-    UserService.prototype.updateUser = function (username, data) {
+    AuthService.prototype.login = function (_a) {
+        var email = _a.email, password = _a.password;
         return __awaiter(this, void 0, void 0, function () {
+            var user, isValid, payload, token, err_2;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _b.trys.push([0, 3, , 4]);
+                        return [4 /*yield*/, this.userRepo.findOne({ where: { email: email } })];
+                    case 1:
+                        user = _b.sent();
+                        return [4 /*yield*/, user.comparePassword(password)];
+                    case 2:
+                        isValid = _b.sent();
+                        if (!isValid) {
+                            throw new common_1.UnauthorizedException('Invalid credential');
+                        }
+                        payload = { username: user.username };
+                        token = this.jwtService.sign(payload);
+                        console.log("token ---: ", token);
+                        return [2 /*return*/, __assign(__assign({}, user.toJSON()), { token: token })];
+                    case 3:
+                        err_2 = _b.sent();
+                        throw new common_1.UnauthorizedException('Invalid credentials');
+                    case 4: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    AuthService.prototype.findCurrentUser = function (username) {
+        return __awaiter(this, void 0, void 0, function () {
+            var user, payload, token;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.userRepo.findOne({
+                            where: { username: username }
+                        })];
+                    case 1:
+                        user = _a.sent();
+                        payload = { username: username };
+                        token = this.jwtService.sign(payload);
+                        return [2 /*return*/, __assign(__assign({}, user.toJSON()), { token: token })];
+                }
+            });
+        });
+    };
+    AuthService.prototype.updateUser = function (username, data) {
+        return __awaiter(this, void 0, Promise, function () {
+            var user, payload, token;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.userRepo.update({ username: username }, data)];
                     case 1:
                         _a.sent();
-                        return [2 /*return*/, this.findByUsername(username)];
-                }
-            });
-        });
-    };
-    UserService.prototype.followUser = function (currentUser, username) {
-        return __awaiter(this, void 0, void 0, function () {
-            var user;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.userRepo.findOne({
-                            where: { username: username },
-                            relations: ['followers']
-                        })];
-                    case 1:
-                        user = _a.sent();
-                        user.followers.push(currentUser);
-                        return [4 /*yield*/, user.save()];
+                        return [4 /*yield*/, this.userRepo.findOne({
+                                where: { username: username }
+                            })];
                     case 2:
-                        _a.sent();
-                        return [2 /*return*/, user.toProfile(currentUser)];
-                }
-            });
-        });
-    };
-    UserService.prototype.unfollowUser = function (currentUser, username) {
-        return __awaiter(this, void 0, void 0, function () {
-            var user;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.userRepo.findOne({
-                            where: { username: username },
-                            relations: ['followers']
-                        })];
-                    case 1:
                         user = _a.sent();
-                        user.followers = user.followers.filter(function (follower) { return follower !== currentUser; });
-                        return [4 /*yield*/, user.save()];
-                    case 2:
-                        _a.sent();
-                        return [2 /*return*/, user.toProfile(currentUser)];
+                        payload = { username: username };
+                        token = this.jwtService.sign(payload);
+                        return [2 /*return*/, __assign(__assign({}, user.toJSON()), { token: token })];
                 }
             });
         });
     };
-    UserService = __decorate([
+    AuthService = __decorate([
         common_1.Injectable(),
         __param(0, typeorm_1.InjectRepository(user_entity_1.UserEntity))
-    ], UserService);
-    return UserService;
+    ], AuthService);
+    return AuthService;
 }());
-exports.UserService = UserService;
+exports.AuthService = AuthService;

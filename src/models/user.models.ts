@@ -1,3 +1,4 @@
+import { UserEntity } from './../entities/user.entity';
 import { IsEmail, IsString, MinLength, MaxLength, IsOptional } from 'class-validator';
 
 export class LoginDTO {
@@ -32,4 +33,19 @@ export class UpdateUserDTO {
 
   @IsOptional()
   bio: string
+}
+
+export interface UserResponse {
+  email: string;
+  username?: string;
+  bio: string;
+  image: string | null;
+}
+
+export interface AuthResponse extends Partial<UserEntity> {
+  token: string;
+}
+
+export interface ProfileResponse extends UserResponse {
+  following: boolean | null;
 }

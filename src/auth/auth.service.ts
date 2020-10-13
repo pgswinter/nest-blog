@@ -1,5 +1,7 @@
+import { ResponseObject } from './../models/response.model';
+import { AuthResponse, UpdateUserDTO } from '../models/user.models';
 import { UserEntity } from './../entities/user.entity';
-import { LoginDTO, RegisterDTO } from '../models/user.model';
+import { LoginDTO, RegisterDTO } from '../models/user.models';
 import {
   ConflictException,
   Injectable,
@@ -9,6 +11,7 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { use } from 'passport';
 
 @Injectable()
 export class AuthService {
@@ -51,14 +54,36 @@ export class AuthService {
       if (!isValid) {
         throw new UnauthorizedException('Invalid credential');
       }
-      
+
       const payload = { username: user.username };
       const token = this.jwtService.sign(payload);
-      console.log(`token ---: `,token);
-      
-      return { user: { ...user.toJSON(), token } };
+      console.log(`token ---: `, token);
+
+      return { ...user.toJSON(), token };
     } catch (err) {
       throw new UnauthorizedException('Invalid credentials');
     }
+  }
+
+  async findCurrentUser(username: string) {
+    const user = await this.userRepo.findOne({
+      where: { username },
+    });
+    const payload = { username };
+    const token = this.jwtService.sign(payload);
+    return { ...user.toJSON(), token };
+  }
+
+  async updateUser(
+    username: string,
+    data: UpdateUserDTO,
+  ): Promise<AuthResponse> {
+    await this.userRepo.update({ username }, data);
+    const user = await this.userRepo.findOne({
+      where: { username },
+    });
+    const payload = { username };
+    const token = this.jwtService.sign(payload);
+    return { ...user.toJSON(), token };
   }
 }

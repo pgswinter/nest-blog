@@ -45,75 +45,58 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.ProfileController = void 0;
+exports.CommentsService = void 0;
+var comment_entity_1 = require("./../entities/comment.entity");
+var typeorm_1 = require("@nestjs/typeorm");
 var common_1 = require("@nestjs/common");
-var user_decoration_1 = require("src/auth/user.decoration");
-var passport_1 = require("@nestjs/passport");
-var ProfileController = /** @class */ (function () {
-    function ProfileController(userService) {
-        this.userService = userService;
+var CommentsService = /** @class */ (function () {
+    function CommentsService(commentRepo) {
+        this.commentRepo = commentRepo;
     }
-    ProfileController.prototype.findProfile = function (username) {
+    CommentsService.prototype.findByArticleSlug = function (slug) {
+        return this.commentRepo.find({
+            where: { 'article.slug': slug },
+            relations: ['article']
+        });
+    };
+    CommentsService.prototype.findById = function (id) {
+        return this.commentRepo.findOne({ where: { id: id } });
+    };
+    CommentsService.prototype.createCommnet = function (user, data) {
         return __awaiter(this, void 0, void 0, function () {
-            var profile;
+            var comment;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.userService.findByUsername(username)];
+                    case 0: return [4 /*yield*/, this.commentRepo.create(data)];
                     case 1:
-                        profile = _a.sent();
-                        if (!profile) {
-                            throw new common_1.NotFoundException();
-                        }
-                        return [2 /*return*/, { profile: profile }];
+                        comment = _a.sent();
+                        comment.author = user;
+                        comment.save();
+                        return [2 /*return*/, this.commentRepo.findOne({ where: { body: data.body } })];
                 }
             });
         });
     };
-    ProfileController.prototype.followUser = function (user, username) {
+    CommentsService.prototype.deleteComment = function (user, id) {
         return __awaiter(this, void 0, void 0, function () {
-            var profile;
+            var comment;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.userService.followUser(user, username)];
+                    case 0: return [4 /*yield*/, this.commentRepo.findOne({
+                            where: { id: id, 'author.id': user.id }
+                        })];
                     case 1:
-                        profile = _a.sent();
-                        return [2 /*return*/, { profile: profile }];
+                        comment = _a.sent();
+                        comment.remove();
+                        return [2 /*return*/, comment];
                 }
             });
         });
     };
-    ProfileController.prototype.unfollowUser = function (user, username) {
-        return __awaiter(this, void 0, void 0, function () {
-            var profile;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.userService.unfollowUser(user, username)];
-                    case 1:
-                        profile = _a.sent();
-                        return [2 /*return*/, { profile: profile }];
-                }
-            });
-        });
-    };
-    __decorate([
-        common_1.Get('/:username'),
-        __param(0, common_1.Param('username'))
-    ], ProfileController.prototype, "findProfile");
-    __decorate([
-        common_1.Post('/:username/follow'),
-        common_1.UseGuards(passport_1.AuthGuard()),
-        __param(0, user_decoration_1.User()),
-        __param(1, common_1.Param('username'))
-    ], ProfileController.prototype, "followUser");
-    __decorate([
-        common_1.Delete('/:username/follow'),
-        common_1.UseGuards(passport_1.AuthGuard()),
-        __param(0, user_decoration_1.User()),
-        __param(1, common_1.Param('username'))
-    ], ProfileController.prototype, "unfollowUser");
-    ProfileController = __decorate([
-        common_1.Controller('profiles')
-    ], ProfileController);
-    return ProfileController;
+    CommentsService = __decorate([
+        common_1.Injectable(),
+        __param(0, typeorm_1.InjectRepository(comment_entity_1.CommentEntity))
+    ], CommentsService);
+    return CommentsService;
 }());
-exports.ProfileController = ProfileController;
+exports.CommentsService = CommentsService;

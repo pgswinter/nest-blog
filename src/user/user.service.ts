@@ -1,4 +1,4 @@
-import { UpdateUserDTO } from './../models/user.model';
+import { UpdateUserDTO } from '../models/user.models';
 import { UserEntity } from './../entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
@@ -10,15 +10,13 @@ export class UserService {
     @InjectRepository(UserEntity) private userRepo: Repository<UserEntity>,
   ) {}
 
-  private checkIfFollowing() {}
-
-  async findByUsername(username: string) {
-    return await this.userRepo.findOne({ where: { username } });
-  }
-
-  async updateUser(username: string, data: UpdateUserDTO) {
-    await this.userRepo.update({ username }, data);
-    return this.findByUsername(username);
+  async findByUsername(username: string, user?: UserEntity) {
+    return await (
+      await this.userRepo.findOne({
+        where: { username },
+        relations: ['followers'],
+      })
+    ).toProfile(user);
   }
 
   async followUser(currentUser: UserEntity, username: string) {

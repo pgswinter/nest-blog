@@ -3,9 +3,10 @@
 # Accept-Charset: utf-8
 
 # {
-#     "email":"jake@jake.jake",
-#     "username": "jake",
-#     "password":"password"
+#     "user": {
+#         "email":"roberthost.vn@gmail.com", 
+#         "password":"{{PASSWORD}}"
+#     }
 # }
 
 # GET http://localhost:4000/api/user HTTP/1.1
@@ -25,17 +26,18 @@
 # }
 
 
-# GET http://localhost:4000/api/profiles/jake HTTP/1.1
+# GET http://localhost:4000/api/profiles/robert/ HTTP/1.1
 # content-type: application/json
 # Accept-Charset: utf-8
-# Authorization: Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Impha2UiLCJpYXQiOjE2MDIwNjIxNTUsImV4cCI6MTYwMjA2NTc1NX0.gtFlisSvNk-tepVBrhkR8zdVjrX1Mus3lARXn1qJunQ
+# Authorization: Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvYmVydCIsImlhdCI6MTYwMjE1MTk0MSwiZXhwIjoxNjAyMTU1NTQxfQ.Ih9xgfkN1gbifC4oaHD0pbnKBrcydJOyjopPoOqgk2c
 
-# POST http://localhost:4000/api/profiles/jake/follow HTTP/1.1
-# content-type: application/json
-# Accept-Charset: utf-8
-# Authorization: Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Impha2UiLCJpYXQiOjE2MDIwNjIxNTUsImV4cCI6MTYwMjA2NTc1NX0.gtFlisSvNk-tepVBrhkR8zdVjrX1Mus3lARXn1qJunQ
 
-DELETE  http://localhost:4000/api/profiles/jake/follow HTTP/1.1
+POST http://localhost:4000/api/profiles/robert/follow HTTP/1.1
 content-type: application/json
 Accept-Charset: utf-8
-Authorization: Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Impha2UiLCJpYXQiOjE2MDIwNjIxNTUsImV4cCI6MTYwMjA2NTc1NX0.gtFlisSvNk-tepVBrhkR8zdVjrX1Mus3lARXn1qJunQ
+Authorization: Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvYmVydCIsImlhdCI6MTYwMjE1MTk0MSwiZXhwIjoxNjAyMTU1NTQxfQ.Ih9xgfkN1gbifC4oaHD0pbnKBrcydJOyjopPoOqgk2c
+
+# DELETE  http://localhost:4000/api/profiles/robert/follow HTTP/1.1
+# content-type: application/json
+# Accept-Charset: utf-8
+# Authorization: Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvYmVydCIsImlhdCI6MTYwMjE1MTk0MSwiZXhwIjoxNjAyMTU1NTQxfQ.Ih9xgfkN1gbifC4oaHD0pbnKBrcydJOyjopPoOqgk2c

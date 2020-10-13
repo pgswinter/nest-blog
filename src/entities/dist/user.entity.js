@@ -67,11 +67,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 exports.UserEntity = void 0;
+var comment_entity_1 = require("./comment.entity");
 var typeorm_1 = require("typeorm");
 var bcrypt = require("bcryptjs");
 var class_transformer_1 = require("class-transformer");
 var class_validator_1 = require("class-validator");
 var abstract_entity_1 = require("./abstract-entity");
+var article_entity_1 = require("./article.entity");
 var UserEntity = /** @class */ (function (_super) {
     __extends(UserEntity, _super);
     function UserEntity() {
@@ -107,7 +109,10 @@ var UserEntity = /** @class */ (function (_super) {
         return class_transformer_1.classToPlain(this);
     };
     UserEntity.prototype.toProfile = function (user) {
-        var following = this.followers.includes(user);
+        var following = null;
+        if (user) {
+            following = this.followers.includes(user);
+        }
         var profile = this.toJSON();
         delete profile.followers;
         return __assign(__assign({}, profile), { following: following });
@@ -124,7 +129,7 @@ var UserEntity = /** @class */ (function (_super) {
         typeorm_1.Column({ "default": '' })
     ], UserEntity.prototype, "bio");
     __decorate([
-        typeorm_1.Column({ "default": '', nullable: true })
+        typeorm_1.Column({ "default": null, nullable: true })
     ], UserEntity.prototype, "image");
     __decorate([
         typeorm_1.Column(),
@@ -137,6 +142,15 @@ var UserEntity = /** @class */ (function (_super) {
     __decorate([
         typeorm_1.ManyToMany(function (type) { return UserEntity_1; }, function (user) { return user.followers; })
     ], UserEntity.prototype, "followee");
+    __decorate([
+        typeorm_1.OneToMany(function (type) { return article_entity_1.ArticleEntity; }, function (article) { return article.author; })
+    ], UserEntity.prototype, "articles");
+    __decorate([
+        typeorm_1.OneToMany(function (type) { return comment_entity_1.CommentEntity; }, function (comment) { return comment.author; })
+    ], UserEntity.prototype, "comments");
+    __decorate([
+        typeorm_1.ManyToMany(function (type) { return article_entity_1.ArticleEntity; }, function (article) { return article.favoritedBy; })
+    ], UserEntity.prototype, "favorites");
     __decorate([
         typeorm_1.BeforeInsert()
     ], UserEntity.prototype, "hashPassword");

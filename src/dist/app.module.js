@@ -7,6 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 exports.__esModule = true;
 exports.AppModule = void 0;
+var tag_entity_1 = require("./entities/tag.entity");
 var common_1 = require("@nestjs/common");
 var typeorm_1 = require("@nestjs/typeorm");
 var app_controller_1 = require("./app.controller");
@@ -14,6 +15,7 @@ var app_service_1 = require("./app.service");
 var database_service_1 = require("./database/database.service");
 var auth_module_1 = require("./auth/auth.module");
 var user_module_1 = require("./user/user.module");
+var article_module_1 = require("./article/article.module");
 var AppModule = /** @class */ (function () {
     function AppModule() {
     }
@@ -21,10 +23,12 @@ var AppModule = /** @class */ (function () {
         common_1.Module({
             imports: [
                 typeorm_1.TypeOrmModule.forRootAsync({
-                    useClass: database_service_1.DatabaseService
+                    useClass: database_service_1.DatabaseConnectionService
                 }),
+                typeorm_1.TypeOrmModule.forFeature([tag_entity_1.TagEntity]),
                 auth_module_1.AuthModule,
                 user_module_1.UserModule,
+                article_module_1.ArticleModule,
             ],
             controllers: [app_controller_1.AppController],
             providers: [app_service_1.AppService]

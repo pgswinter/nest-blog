@@ -1,8 +1,18 @@
-import { BeforeInsert, Column, Entity, JoinTable, ManyToMany } from 'typeorm';
+import { CommentEntity } from './comment.entity';
+import {
+  BeforeInsert,
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  OneToMany,
+  JoinColumn,
+} from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 import { classToPlain, Exclude } from 'class-transformer';
 import { IsEmail } from 'class-validator';
 import { AbstractEntity } from './abstract-entity';
+import { ArticleEntity } from './article.entity';
 
 @Entity('users')
 export class UserEntity extends AbstractEntity {
@@ -16,14 +26,13 @@ export class UserEntity extends AbstractEntity {
   @Column({ default: '' })
   bio: string;
 
-  @Column({ default: '', nullable: true })
+  @Column({ default: null, nullable: true })
   image: string | null;
 
   @Column()
   @Exclude()
   password: string;
 
-  // TODO: Add following
   @ManyToMany(
     type => UserEntity,
     user => user.followee,
@@ -36,6 +45,24 @@ export class UserEntity extends AbstractEntity {
     user => user.followers,
   )
   followee: UserEntity[];
+
+  @OneToMany(
+    type => ArticleEntity,
+    article => article.author,
+  )
+  articles: ArticleEntity[];
+
+  @OneToMany(
+    type => CommentEntity,
+    comment => comment.author
+  )
+  comments: CommentEntity[]
+
+  @ManyToMany(
+    type => ArticleEntity,
+    article => article.favoritedBy,
+  )
+  favorites: ArticleEntity[];
 
   @BeforeInsert()
   async hashPassword() {
@@ -50,8 +77,11 @@ export class UserEntity extends AbstractEntity {
     return classToPlain(this);
   }
 
-  toProfile(user: UserEntity) {
-    const following = this.followers.includes(user);
+  toProfile(user?: UserEntity) {
+    let following = null;
+    if (user) {
+      following = this.followers.includes(user);
+    }
     const profile: any = this.toJSON();
     delete profile.followers;
     return { ...profile, following };

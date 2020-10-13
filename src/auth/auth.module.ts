@@ -22,6 +22,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
   ],
   providers: [AuthService, JwtStrategy],
   controllers: [AuthController],
-  exports: [PassportModule, JwtStrategy]
+  exports: [PassportModule, JwtStrategy, AuthService]
 })
 export class AuthModule {}

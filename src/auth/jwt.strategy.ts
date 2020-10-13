@@ -1,4 +1,4 @@
-import { AuthPayload } from '../models/user.model';
+import { AuthPayload } from '../models/user.models';
 import { UserEntity } from './../entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
