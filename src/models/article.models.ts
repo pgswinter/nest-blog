@@ -1,5 +1,6 @@
 import { ProfileResponse } from './user.models';
 import { IsArray, IsOptional, IsString } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateArticleDTO {
   @IsString()
@@ -13,6 +14,11 @@ export class CreateArticleDTO {
 
   @IsArray()
   tagList: string[];
+}
+
+export class CreateArticleBody {
+  @ApiProperty()
+  article: CreateArticleDTO;
 }
 
 export class UpdateArticleDTO {
@@ -35,10 +41,10 @@ export class UpdateArticleDTO {
 
 export interface FindFeedQuery {
   limit?: number;
-  offset?: number
+  offset?: number;
 }
 
-export interface FindAllQuery extends FindFeedQuery{
+export interface FindAllQuery extends FindFeedQuery {
   tag?: string;
   author?: string;
   favorited?: string;
@@ -56,5 +62,3 @@ export interface ArticleResponse {
   favoritesCount: number;
   author: ProfileResponse;
 }
-
-

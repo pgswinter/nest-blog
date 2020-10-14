@@ -46,7 +46,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 exports.AuthController = void 0;
+var user_models_1 = require("../models/user.models");
 var common_1 = require("@nestjs/common");
+var swagger_1 = require("@nestjs/swagger");
 var AuthController = /** @class */ (function () {
     function AuthController(authService) {
         this.authService = authService;
@@ -79,10 +81,15 @@ var AuthController = /** @class */ (function () {
     };
     __decorate([
         common_1.Post(),
+        swagger_1.ApiCreatedResponse({ description: 'User Registration' }),
+        swagger_1.ApiBody({ type: user_models_1.RegisterDTO }),
         __param(0, common_1.Body(common_1.ValidationPipe))
     ], AuthController.prototype, "register");
     __decorate([
         common_1.Post('/login'),
+        swagger_1.ApiOkResponse({ description: 'User Login' }),
+        swagger_1.ApiUnauthorizedResponse({ description: 'Invalid credentials' }),
+        swagger_1.ApiBody({ type: user_models_1.LoginDTO }),
         __param(0, common_1.Body('user', common_1.ValidationPipe))
     ], AuthController.prototype, "login");
     AuthController = __decorate([

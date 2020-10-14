@@ -24,6 +24,7 @@ import {
 } from '@nestjs/common';
 import { User } from '../auth/user.decorator';
 import { Query } from '@nestjs/common';
+import { ApiBearerAuth, ApiOkResponse, ApiUnauthorizedResponse } from "@nestjs/swagger";
 
 @Controller('articles')
 export class ArticleController {
@@ -44,6 +45,7 @@ export class ArticleController {
 
   @Get('/feed')
   @UseGuards(new OptionalAuthGuard())
+  @ApiBearerAuth()
   async findFeed(
     @User() user: UserEntity,
     @Query() query: FindFeedQuery,
@@ -97,6 +99,9 @@ export class ArticleController {
     return { article };
   }
 
+  @ApiBearerAuth()
+  @ApiOkResponse({description: 'Unfavorite Article'})
+  @ApiUnauthorizedResponse()
   @Delete('/:slug/unfavorite')
   @UseGuards(AuthGuard())
   async unfavoriteArticle(

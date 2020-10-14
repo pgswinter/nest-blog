@@ -21,17 +21,20 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 exports.__esModule = true;
 exports.UpdateUserDTO = exports.RegisterDTO = exports.LoginDTO = void 0;
 var class_validator_1 = require("class-validator");
+var swagger_1 = require("@nestjs/swagger");
 var LoginDTO = /** @class */ (function () {
     function LoginDTO() {
     }
     __decorate([
         class_validator_1.IsEmail(),
         class_validator_1.IsString(),
-        class_validator_1.MinLength(4)
+        class_validator_1.MinLength(4),
+        swagger_1.ApiProperty({ type: String, description: 'email' })
     ], LoginDTO.prototype, "email");
     __decorate([
         class_validator_1.IsString(),
-        class_validator_1.MinLength(4)
+        class_validator_1.MinLength(4),
+        swagger_1.ApiProperty({ type: String, description: 'password' })
     ], LoginDTO.prototype, "password");
     return LoginDTO;
 }());
@@ -44,7 +47,8 @@ var RegisterDTO = /** @class */ (function (_super) {
     __decorate([
         class_validator_1.IsString(),
         class_validator_1.MinLength(4),
-        class_validator_1.MaxLength(20)
+        class_validator_1.MaxLength(20),
+        swagger_1.ApiProperty({ type: String, description: 'username' })
     ], RegisterDTO.prototype, "username");
     return RegisterDTO;
 }(LoginDTO));

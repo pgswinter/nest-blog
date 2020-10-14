@@ -6,8 +6,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 exports.__esModule = true;
-exports.UpdateArticleDTO = exports.CreateArticleDTO = void 0;
+exports.UpdateArticleDTO = exports.CreateArticleBody = exports.CreateArticleDTO = void 0;
 var class_validator_1 = require("class-validator");
+var swagger_1 = require("@nestjs/swagger");
 var CreateArticleDTO = /** @class */ (function () {
     function CreateArticleDTO() {
     }
@@ -26,6 +27,15 @@ var CreateArticleDTO = /** @class */ (function () {
     return CreateArticleDTO;
 }());
 exports.CreateArticleDTO = CreateArticleDTO;
+var CreateArticleBody = /** @class */ (function () {
+    function CreateArticleBody() {
+    }
+    __decorate([
+        swagger_1.ApiProperty()
+    ], CreateArticleBody.prototype, "article");
+    return CreateArticleBody;
+}());
+exports.CreateArticleBody = CreateArticleBody;
 var UpdateArticleDTO = /** @class */ (function () {
     function UpdateArticleDTO() {
     }

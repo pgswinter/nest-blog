@@ -51,6 +51,7 @@ var passport_1 = require("@nestjs/passport");
 var common_1 = require("@nestjs/common");
 var user_decorator_1 = require("../auth/user.decorator");
 var common_2 = require("@nestjs/common");
+var swagger_1 = require("@nestjs/swagger");
 var ArticleController = /** @class */ (function () {
     function ArticleController(articleService) {
         this.articleService = articleService;
@@ -168,6 +169,7 @@ var ArticleController = /** @class */ (function () {
     __decorate([
         common_1.Get('/feed'),
         common_1.UseGuards(new optional_auth_guard_1.OptionalAuthGuard()),
+        swagger_1.ApiBearerAuth(),
         __param(0, user_decorator_1.User()),
         __param(1, common_2.Query())
     ], ArticleController.prototype, "findFeed");
@@ -200,6 +202,9 @@ var ArticleController = /** @class */ (function () {
         __param(0, user_decorator_1.User()), __param(1, common_1.Param('slug'))
     ], ArticleController.prototype, "favoriteArticle");
     __decorate([
+        swagger_1.ApiBearerAuth(),
+        swagger_1.ApiOkResponse({ description: 'Unfavorite Article' }),
+        swagger_1.ApiUnauthorizedResponse(),
         common_1.Delete('/:slug/unfavorite'),
         common_1.UseGuards(passport_1.AuthGuard()),
         __param(0, user_decorator_1.User()),
